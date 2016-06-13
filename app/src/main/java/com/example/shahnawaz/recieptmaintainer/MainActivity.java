@@ -12,6 +12,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.shahnawaz.recieptmaintainer.adapter.ListAdapter;
+import com.example.shahnawaz.recieptmaintainer.model.Data;
+import com.example.shahnawaz.recieptmaintainer.retro.API;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -19,9 +21,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
+    private API mAPI = new API();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,29 +47,12 @@ public class MainActivity extends AppCompatActivity {
         assert recyclerView != null;
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        new Thread(new Runnable() {
+        mAPI.getAll(new API.ListResponse() {
             @Override
-            public void run() {
-                try {
-                    HttpURLConnection connection = (HttpURLConnection) new URL("http://localhost/code/json").openConnection();
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-
-                    String line = null;
-                    StringBuilder builder = new StringBuilder();
-
-                    while ((line = reader.readLine()) != null) {
-                        builder.append(line);
-                    }
-
-                    if (connection.getResponseCode() == 200) {
-                        recyclerView.setAdapter(new ListAdapter(builder.toString()));
-                    }
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+            public void onResponse(List<Data> data) {
+                recyclerView.setAdapter(new ListAdapter(data));
             }
-        }).start();
+        });
 
     }
 

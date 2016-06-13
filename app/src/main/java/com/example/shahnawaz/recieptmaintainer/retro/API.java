@@ -45,7 +45,8 @@ public class API {
                 .enqueue(new Callback<List<Data>>() {
                     @Override
                     public void onResponse(Call<List<Data>> call, Response<List<Data>> response) {
-                        res.onResponse(response.body());
+                        if (response.body() != null)
+                            res.onResponse(response.body());
                     }
 
                     @Override

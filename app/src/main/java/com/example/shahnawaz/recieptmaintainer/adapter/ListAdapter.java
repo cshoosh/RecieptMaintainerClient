@@ -27,6 +27,10 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         mData = gson.fromJson(json, type);
     }
 
+    public ListAdapter(List<Data> data) {
+        mData = data;
+    }
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
