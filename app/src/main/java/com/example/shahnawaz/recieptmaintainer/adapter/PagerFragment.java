@@ -27,7 +27,7 @@ public class PagerFragment extends Fragment {
     API.ListResponse<List<Data>> response = new API.ListResponse<List<Data>>() {
         @Override
         public void onResponse(List<Data> data) {
-            recyclerView.setAdapter(new ListAdapter(data));
+            recyclerView.setAdapter(new ListAdapter(getActivity(), data));
         }
 
         @Override

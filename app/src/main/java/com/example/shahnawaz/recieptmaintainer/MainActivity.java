@@ -23,6 +23,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     private ViewPagerAdapter mPagerAdapter;
+    private ViewPager mPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,16 +37,21 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new UpdateFrag().show(getSupportFragmentManager(), null);
+                UpdateFrag frag = new UpdateFrag();
+                Bundle args = new Bundle();
+                args.putInt(UpdateFrag.KEY_TYPE, mPager.getCurrentItem());
+                frag.setArguments(args);
+                frag.show(getSupportFragmentManager(), null);
             }
         });
 
         TabLayout tabs = (TabLayout) findViewById(android.R.id.tabs);
-        ViewPager pager = (ViewPager) findViewById(android.R.id.tabhost);
-        assert tabs != null && pager != null;
+        mPager = (ViewPager) findViewById(android.R.id.tabhost);
+        assert tabs != null && mPager != null;
+
         mPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-        pager.setAdapter(mPagerAdapter);
-        tabs.setupWithViewPager(pager);
+        mPager.setAdapter(mPagerAdapter);
+        tabs.setupWithViewPager(mPager);
     }
 
     public void showMessage() {
