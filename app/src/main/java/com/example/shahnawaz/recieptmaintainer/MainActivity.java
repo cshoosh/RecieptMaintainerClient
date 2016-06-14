@@ -3,6 +3,8 @@ package com.example.shahnawaz.recieptmaintainer;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,20 +14,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.shahnawaz.recieptmaintainer.adapter.ListAdapter;
+import com.example.shahnawaz.recieptmaintainer.adapter.ViewPagerAdapter;
 import com.example.shahnawaz.recieptmaintainer.model.Data;
 import com.example.shahnawaz.recieptmaintainer.retro.API;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-    private RecyclerView recyclerView;
-    private API mAPI = new API();
+
+    private ViewPagerAdapter mPagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,17 +40,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        recyclerView = (RecyclerView) findViewById(android.R.id.list);
-        assert recyclerView != null;
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        TabLayout tabs = (TabLayout) findViewById(android.R.id.tabs);
+        ViewPager pager = (ViewPager) findViewById(android.R.id.tabhost);
+        assert tabs != null && pager != null;
+        mPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
+        pager.setAdapter(mPagerAdapter);
+        tabs.setupWithViewPager(pager);
+    }
 
-        mAPI.getAll(new API.ListResponse() {
-            @Override
-            public void onResponse(List<Data> data) {
-                recyclerView.setAdapter(new ListAdapter(data));
-            }
-        });
-
+    public void showMessage() {
+        Snackbar.make(findViewById(R.id.coordinator), "No data available", Snackbar.LENGTH_INDEFINITE).show();
     }
 
     @Override
@@ -63,6 +59,11 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    public void refresh() {
+        mPagerAdapter.refresh();
+    }
+
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -71,7 +72,8 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_refresh) {
+            refresh();
             return true;
         }
 

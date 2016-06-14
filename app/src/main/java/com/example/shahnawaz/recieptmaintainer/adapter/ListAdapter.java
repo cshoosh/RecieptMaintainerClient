@@ -13,6 +13,7 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by Shahnawaz on 6/13/2016.
@@ -39,8 +40,9 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.amount.setText(mData.get(position).getAmount());
+        holder.amount.setText(String.format(Locale.US, "%d", mData.get(position).getAmount()));
         holder.description.setText(mData.get(position).getDescription());
+        holder.itemView.setTag(mData.get(position));
     }
 
     @Override
