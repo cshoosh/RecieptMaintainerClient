@@ -61,8 +61,7 @@ public class UpdateFrag extends DialogFragment implements View.OnClickListener {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (!s.toString().isEmpty()) {
                     int number = Integer.parseInt(s.toString());
-                    NumberFormat formatter = NumberFormat.getCurrencyInstance(new Locale("en", "PK"));
-                    labelAmount.setText(formatter.format(number));
+                    labelAmount.setText(MainActivity.NUMBER_FORMAT.format(number));
                 }
             }
 

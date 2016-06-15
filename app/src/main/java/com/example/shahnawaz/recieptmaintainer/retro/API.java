@@ -1,5 +1,6 @@
 package com.example.shahnawaz.recieptmaintainer.retro;
 
+import com.example.shahnawaz.recieptmaintainer.model.CalculateModel;
 import com.example.shahnawaz.recieptmaintainer.model.Data;
 
 import java.io.IOException;
@@ -101,6 +102,23 @@ public class API {
         call.enqueue(callback);
     }
 
+    public void getCalculatedData(final ListResponse<CalculateModel> res) {
+        mRetro.create(APIInterface.class).calculate().enqueue(new Callback<CalculateModel>() {
+            @Override
+            public void onResponse(Call<CalculateModel> call, Response<CalculateModel> response) {
+                if (response.body() != null)
+                    res.onResponse(response.body());
+                else
+                    res.onFailure();
+            }
+
+            @Override
+            public void onFailure(Call<CalculateModel> call, Throwable t) {
+                res.onFailure();
+            }
+        });
+    }
+
     public void getDebit(final ListResponse<List<Data>> res) {
         mRetro.create(APIInterface.class).viewDebit()
                 .enqueue(new Callback<List<Data>>() {
@@ -136,6 +154,9 @@ public class API {
 
         @GET("receipt/delete/{id}")
         Call<String> delete(@Path("id") int id);
+
+        @GET("receipt/calculate/json")
+        Call<CalculateModel> calculate();
     }
 
     public interface ListResponse<T> {

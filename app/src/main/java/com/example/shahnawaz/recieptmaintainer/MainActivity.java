@@ -12,18 +12,24 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.example.shahnawaz.recieptmaintainer.adapter.ListAdapter;
 import com.example.shahnawaz.recieptmaintainer.adapter.ViewPagerAdapter;
+import com.example.shahnawaz.recieptmaintainer.model.CalculateModel;
 import com.example.shahnawaz.recieptmaintainer.model.Data;
 import com.example.shahnawaz.recieptmaintainer.retro.API;
 
+import java.text.NumberFormat;
 import java.util.List;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
     private ViewPagerAdapter mPagerAdapter;
     private ViewPager mPager;
+    public static CalculateModel calculateModel = new CalculateModel(0, 0, 0);
+    public static final NumberFormat NUMBER_FORMAT = NumberFormat.getCurrencyInstance(new Locale("en", "PK"));
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +72,21 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void refresh() {
-        mPagerAdapter.refresh();
+        new API().getCalculatedData(new API.ListResponse<CalculateModel>() {
+            @Override
+            public void onResponse(CalculateModel data) {
+                calculateModel = data;
+                TextView textView = (TextView) findViewById(android.R.id.text1);
+                textView.setText("Difference: " + NUMBER_FORMAT.format(Math.abs(calculateModel.getDiff()))
+                        + " " + (calculateModel.getDiff() < 0 ? "Over" : "Remaining"));
+                mPagerAdapter.refresh();
+            }
+
+            @Override
+            public void onFailure() {
+
+            }
+        });
     }
 
 

@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.shahnawaz.recieptmaintainer.MainActivity;
 import com.example.shahnawaz.recieptmaintainer.R;
@@ -20,9 +21,10 @@ import java.util.List;
  * Created by Shahnawaz on 6/14/2016.
  */
 public class PagerFragment extends Fragment {
-    public static final String KEY_TYPE = "keyTyope";
+    public static final String KEY_TYPE = "keyType";
     private int type = 0;
     private RecyclerView recyclerView;
+    private TextView textSubmit;
 
     API.ListResponse<List<Data>> response = new API.ListResponse<List<Data>>() {
         @Override
@@ -49,14 +51,19 @@ public class PagerFragment extends Fragment {
         View ret = inflater.inflate(R.layout.recycler, container, false);
         recyclerView = (RecyclerView) ret.findViewById(android.R.id.list);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        refresh();
+
+        textSubmit = (TextView) ret.findViewById(android.R.id.text1);
+        ((MainActivity) getActivity()).refresh();
         return ret;
     }
 
     public void refresh() {
-        if (type == 0)
+        if (type == 0) {
             new API().getCredit(response);
-        else
+            textSubmit.setText("Total Credit: " + MainActivity.NUMBER_FORMAT.format(MainActivity.calculateModel.getSum_credit()));
+        } else {
             new API().getDebit(response);
+            textSubmit.setText("Total Paid: " + MainActivity.NUMBER_FORMAT.format(MainActivity.calculateModel.getSum_paid()));
+        }
     }
 }
