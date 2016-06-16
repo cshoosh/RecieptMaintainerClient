@@ -4,6 +4,8 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomSheetDialog;
+import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.v4.app.DialogFragment;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -23,7 +25,7 @@ import java.util.Locale;
 /**
  * Created by Shahnawaz on 6/13/2016.
  */
-public class UpdateFrag extends DialogFragment implements View.OnClickListener {
+public class UpdateFrag extends BottomSheetDialogFragment implements View.OnClickListener {
     public static final String KEY_TYPE = "keyUpdateType";
     public static final String KEY_ID = "keyID";
 
@@ -62,6 +64,8 @@ public class UpdateFrag extends DialogFragment implements View.OnClickListener {
                 if (!s.toString().isEmpty()) {
                     int number = Integer.parseInt(s.toString());
                     labelAmount.setText(MainActivity.NUMBER_FORMAT.format(number));
+                } else {
+                    labelAmount.setText("");
                 }
             }
 
