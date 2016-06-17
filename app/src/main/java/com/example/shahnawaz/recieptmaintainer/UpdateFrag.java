@@ -4,9 +4,7 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.BottomSheetDialogFragment;
-import android.support.v4.app.DialogFragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -18,13 +16,9 @@ import android.widget.Toast;
 
 import com.example.shahnawaz.recieptmaintainer.retro.API;
 
-import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.Locale;
 
-/**
- * Created by Shahnawaz on 6/13/2016.
- */
 public class UpdateFrag extends BottomSheetDialogFragment implements View.OnClickListener {
     private static final String KEY_TYPE = "keyUpdateType";
     private static final String KEY_ID = "keyID";
@@ -60,7 +54,8 @@ public class UpdateFrag extends BottomSheetDialogFragment implements View.OnClic
         amount = (EditText) ret.findViewById(R.id.edtAmount);
         desc = (EditText) ret.findViewById(R.id.edtDesc);
 
-        amount.setText(getArguments().getInt(KEY_AMOUNT + ""));
+        if (getArguments().getInt(KEY_AMOUNT) != 0)
+            amount.setText(String.format(Locale.US, "%d", getArguments().getInt(KEY_AMOUNT)));
         desc.setText(getArguments().getString(KEY_DESC));
         final TextView labelAmount = (TextView) ret.findViewById(R.id.lblAmount);
 
