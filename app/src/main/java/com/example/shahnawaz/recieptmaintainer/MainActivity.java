@@ -43,10 +43,7 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                UpdateFrag frag = new UpdateFrag();
-                Bundle args = new Bundle();
-                args.putInt(UpdateFrag.KEY_TYPE, mPager.getCurrentItem());
-                frag.setArguments(args);
+                UpdateFrag frag = UpdateFrag.newInstance(0, mPager.getCurrentItem(), 0, "");
                 frag.show(getSupportFragmentManager(), null);
             }
         });

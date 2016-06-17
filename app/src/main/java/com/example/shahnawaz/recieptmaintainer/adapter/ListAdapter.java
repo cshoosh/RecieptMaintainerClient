@@ -98,11 +98,8 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> im
 
                                 break;
                             case R.id.action_update:
-                                UpdateFrag frag = new UpdateFrag();
-                                Bundle args = new Bundle();
-                                args.putInt(UpdateFrag.KEY_TYPE, data.getCredit());
-                                args.putInt(UpdateFrag.KEY_ID, data.get_id());
-                                frag.setArguments(args);
+                                UpdateFrag frag = UpdateFrag.newInstance(data.get_id(), data.getCredit()
+                                        , data.getAmount(), data.getDescription());
                                 if (mContext instanceof FragmentActivity)
                                     frag.show(((FragmentActivity) mContext).getSupportFragmentManager(), null);
 

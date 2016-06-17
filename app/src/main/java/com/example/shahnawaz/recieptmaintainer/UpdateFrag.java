@@ -26,11 +26,23 @@ import java.util.Locale;
  * Created by Shahnawaz on 6/13/2016.
  */
 public class UpdateFrag extends BottomSheetDialogFragment implements View.OnClickListener {
-    public static final String KEY_TYPE = "keyUpdateType";
-    public static final String KEY_ID = "keyID";
+    private static final String KEY_TYPE = "keyUpdateType";
+    private static final String KEY_ID = "keyID";
+    private static final String KEY_AMOUNT = "keyAmount";
+    private static final String KEY_DESC = "keyDesc";
 
-    private int type = 0;
-    private int id = 0;
+    public static UpdateFrag newInstance(int id, int type, int amount, @NonNull String desc) {
+
+        Bundle args = new Bundle();
+
+        UpdateFrag fragment = new UpdateFrag();
+        args.putInt(KEY_ID, id);
+        args.putInt(KEY_TYPE, type);
+        args.putInt(KEY_AMOUNT, amount);
+        args.putString(KEY_DESC, desc);
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     private EditText amount, desc;
 
@@ -38,10 +50,6 @@ public class UpdateFrag extends BottomSheetDialogFragment implements View.OnClic
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setStyle(STYLE_NO_TITLE, getTheme());
-        if (getArguments() != null) {
-            type = getArguments().getInt(KEY_TYPE, 0);
-            id = getArguments().getInt(KEY_ID, 0);
-        }
     }
 
     @Nullable
@@ -51,6 +59,9 @@ public class UpdateFrag extends BottomSheetDialogFragment implements View.OnClic
         ret.findViewById(R.id.btnOK).setOnClickListener(this);
         amount = (EditText) ret.findViewById(R.id.edtAmount);
         desc = (EditText) ret.findViewById(R.id.edtDesc);
+
+        amount.setText(getArguments().getInt(KEY_AMOUNT + ""));
+        desc.setText(getArguments().getString(KEY_DESC));
         final TextView labelAmount = (TextView) ret.findViewById(R.id.lblAmount);
 
         amount.addTextChangedListener(new TextWatcher() {
@@ -90,10 +101,10 @@ public class UpdateFrag extends BottomSheetDialogFragment implements View.OnClic
             case R.id.btnOK:
                 if (!amount.getText().toString().isEmpty() && !desc.getText().toString().isEmpty()) {
                     HashMap<String, String> map = new HashMap<>();
-                    map.put("id", id + "");
+                    map.put("id", getArguments().getInt(KEY_ID) + "");
                     map.put("amount", amount.getText().toString());
                     map.put("desc", desc.getText().toString());
-                    map.put("credit", type + "");
+                    map.put("credit", getArguments().getInt(KEY_TYPE) + "");
                     new API().addUpdate(new API.ListResponse<String>() {
                         @Override
                         public void onResponse(String data) {
@@ -105,7 +116,7 @@ public class UpdateFrag extends BottomSheetDialogFragment implements View.OnClic
                         public void onFailure() {
 
                         }
-                    }, map, id != 0);
+                    }, map, getArguments().getInt(KEY_ID) != 0);
                     dismiss();
                 } else {
                     Toast.makeText(getActivity(), "Please Insert Amount and Description", Toast.LENGTH_LONG).show();
