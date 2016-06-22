@@ -1,5 +1,9 @@
 package com.example.shahnawaz.recieptmaintainer.retro;
 
+import android.view.View;
+import android.widget.ProgressBar;
+
+import com.example.shahnawaz.recieptmaintainer.MainActivity;
 import com.example.shahnawaz.recieptmaintainer.model.CalculateModel;
 import com.example.shahnawaz.recieptmaintainer.model.Data;
 
@@ -22,9 +26,6 @@ import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 
-/**
- * Created by Shahnawaz on 6/13/2016.
- */
 public class API {
     private static final String DEV_BASE_URL = "http://api.image1animation.com/";
     private Retrofit mRetro;
@@ -69,20 +70,7 @@ public class API {
 
     public void getCredit(final ListResponse<List<Data>> res) {
         mRetro.create(APIInterface.class).viewCredit()
-                .enqueue(new Callback<List<Data>>() {
-                    @Override
-                    public void onResponse(Call<List<Data>> call, Response<List<Data>> response) {
-                        if (response.body() != null && !response.body().isEmpty())
-                            res.onResponse(response.body());
-                        else
-                            res.onFailure();
-                    }
-
-                    @Override
-                    public void onFailure(Call<List<Data>> call, Throwable t) {
-                        res.onFailure();
-                    }
-                });
+                .enqueue(new CustomCallback<>(res));
     }
 
     public void delete(ListResponse<String> res, int id) {
@@ -103,38 +91,12 @@ public class API {
     }
 
     public void getCalculatedData(final ListResponse<CalculateModel> res) {
-        mRetro.create(APIInterface.class).calculate().enqueue(new Callback<CalculateModel>() {
-            @Override
-            public void onResponse(Call<CalculateModel> call, Response<CalculateModel> response) {
-                if (response.body() != null)
-                    res.onResponse(response.body());
-                else
-                    res.onFailure();
-            }
-
-            @Override
-            public void onFailure(Call<CalculateModel> call, Throwable t) {
-                res.onFailure();
-            }
-        });
+        mRetro.create(APIInterface.class).calculate().enqueue(new CustomCallback<>(res));
     }
 
     public void getDebit(final ListResponse<List<Data>> res) {
         mRetro.create(APIInterface.class).viewDebit()
-                .enqueue(new Callback<List<Data>>() {
-                    @Override
-                    public void onResponse(Call<List<Data>> call, Response<List<Data>> response) {
-                        if (response.body() != null && !response.body().isEmpty())
-                            res.onResponse(response.body());
-                        else
-                            res.onFailure();
-                    }
-
-                    @Override
-                    public void onFailure(Call<List<Data>> call, Throwable t) {
-                        res.onFailure();
-                    }
-                });
+                .enqueue(new CustomCallback<>(res));
     }
 
     public interface APIInterface {
@@ -157,6 +119,37 @@ public class API {
 
         @GET("receipt/calculate/json")
         Call<CalculateModel> calculate();
+    }
+
+    public class CustomCallback<T> implements Callback<T> {
+        private ListResponse<T> mResponse;
+        private ProgressBar mProgressBar;
+
+        public CustomCallback(ListResponse<T> response) {
+            mResponse = response;
+            mProgressBar = MainActivity.getProgressBar();
+
+            if (mProgressBar != null)
+                mProgressBar.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        public void onResponse(Call<T> call, Response<T> response) {
+            if (response.body() != null)
+                mResponse.onResponse(response.body());
+            else
+                mResponse.onFailure();
+
+            if (mProgressBar != null)
+                mProgressBar.setVisibility(View.GONE);
+        }
+
+        @Override
+        public void onFailure(Call<T> call, Throwable t) {
+            mResponse.onFailure();
+            if (mProgressBar != null)
+                mProgressBar.setVisibility(View.GONE);
+        }
     }
 
     public interface ListResponse<T> {

@@ -6,22 +6,18 @@ import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.example.shahnawaz.recieptmaintainer.adapter.ListAdapter;
 import com.example.shahnawaz.recieptmaintainer.adapter.ViewPagerAdapter;
 import com.example.shahnawaz.recieptmaintainer.model.CalculateModel;
-import com.example.shahnawaz.recieptmaintainer.model.Data;
 import com.example.shahnawaz.recieptmaintainer.retro.API;
 
 import java.text.NumberFormat;
-import java.util.List;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
@@ -35,6 +31,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mProgressBar = (ProgressBar) findViewById(R.id.toolbar_progress_bar);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -101,5 +100,11 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private static ProgressBar mProgressBar;
+
+    public static ProgressBar getProgressBar() {
+        return mProgressBar;
     }
 }
