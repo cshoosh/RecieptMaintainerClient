@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.shahnawaz.recieptmaintainer.Details;
 import com.example.shahnawaz.recieptmaintainer.R;
 import com.example.shahnawaz.recieptmaintainer.UpdateFrag;
 import com.example.shahnawaz.recieptmaintainer.model.Data;
@@ -57,6 +59,17 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> im
         holder.overflow.setOnClickListener(this);
         holder.overflow.setTag(mData.get(position));
         holder.itemView.setTag(mData.get(position));
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (view.getContext() instanceof FragmentActivity) {
+                    FragmentManager manager = ((FragmentActivity) view.getContext()).getSupportFragmentManager();
+                    Details.newInstance((Data) view.getTag())
+                            .show(manager, null);
+                }
+            }
+        });
     }
 
     @Override

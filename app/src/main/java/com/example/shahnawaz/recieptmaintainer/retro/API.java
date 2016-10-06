@@ -3,6 +3,7 @@ package com.example.shahnawaz.recieptmaintainer.retro;
 import android.view.View;
 import android.widget.ProgressBar;
 
+import com.example.shahnawaz.recieptmaintainer.BuildConfig;
 import com.example.shahnawaz.recieptmaintainer.MainActivity;
 import com.example.shahnawaz.recieptmaintainer.model.CalculateModel;
 import com.example.shahnawaz.recieptmaintainer.model.Data;
@@ -55,7 +56,7 @@ public class API {
             @Override
             public okhttp3.Response intercept(Chain chain) throws IOException {
                 Request request = chain.request().newBuilder()
-                        .addHeader("Auth", "eu3euQ81z0AwMxeHSb3d78L5TX83vkp3").build();
+                        .addHeader("Auth", BuildConfig.AUTH).build();
                 return chain.proceed(request);
             }
         }).build();

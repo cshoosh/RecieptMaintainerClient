@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.example.shahnawaz.recieptmaintainer.retro.API;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 
@@ -100,6 +101,7 @@ public class UpdateFrag extends BottomSheetDialogFragment implements View.OnClic
                     map.put("amount", amount.getText().toString());
                     map.put("desc", desc.getText().toString());
                     map.put("credit", getArguments().getInt(KEY_TYPE) + "");
+                    map.put("date", Details.FORMAT_FROM.format(new Date()));
                     new API().addUpdate(new API.ListResponse<String>() {
                         @Override
                         public void onResponse(String data) {
